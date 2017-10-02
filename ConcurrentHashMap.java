@@ -18,7 +18,7 @@
  * 我们都知道HashMap是线程不安全的。Hashtable是线程安全的。看过Hashtable源码的我们都知道Hashtable的线程安全是采用在每个方法来添加了synchronized关键字来修饰，即Hashtable是针对整个table的锁定，这样就导致HashTable容器在竞争激烈的并发环境下表现出效率低下。
  *效率低下的原因说的更详细点：是因为所有访问HashTable的线程都必须竞争同一把锁。当一个线程访问HashTable的同步方法时，其他线程访问HashTable的同步方法时，可能会进入阻塞或轮询状态。如线程1使用put进行添加元素，线程2不但不能使用put方法添加元素，并且也不能使用get方法来获取元素，所以竞争越激烈效率越低。
 
- * ConcurerruntHashMap（jdk1.6，维护哈希表的分段，分段中维护哈希桶）：
+ *ConcurerruntHashMap（jdk1.6，维护哈希表的分段，分段中维护哈希桶）：
  * 基于Hashtable的缺点，人们就开始思考，假如容器里有多把锁，每一把锁用于锁容器其中一部分数据，那么当多线程访问容器里不同数据段的数据时，线程间就不会存在锁竞争，从而可以有效的提高并发访问效率呢？？这就是我们的“锁分离”技术，这也是ConcurrentHashMap实现的基础。
  ConcurrentHashMap使用的就是锁分段技术，ConcurrentHashMap由多个Segment组成(Segment下包含很多Node，也就是我们的键值对了)，每个Segment都有把锁来实现线程安全，当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问。
  因此，关于ConcurrentHashMap就转化为了对Segment的研究。这是因为，ConcurrentHashMap的get、put操作是直接委托给Segment的get、put方法，但是自己上手上的JDK1.8的具体实现确不想网上这些博文所介绍的。因此，就有了本篇博文的介绍。
