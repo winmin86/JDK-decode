@@ -1,5 +1,5 @@
 /**
- * HashMap类解读
+ * HashMap源码解析（基于JDK1.8）
  * 参考地址：
  * 美团技术团队：https://tech.meituan.com/java-hashmap.html
  * 红黑联盟：https://www.2cto.com/kf/201505/401433.html
